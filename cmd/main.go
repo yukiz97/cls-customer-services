@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"github.com/yukiz97/cls-customer-services/apiservices"
 	"log"
 
 	"github.com/mitchellh/mapstructure"
@@ -14,6 +14,7 @@ type configuration struct {
 	MYSQLUsername string
 	MYSQLPassword string
 	MYSQLDB       string
+	ListenPort    int
 }
 
 func main() {
@@ -26,6 +27,5 @@ func main() {
 	}
 
 	lcservices.InitLocalServices(configuration.MYSQLHost, configuration.MYSQLUsername, configuration.MYSQLPassword, configuration.MYSQLDB)
-
-	fmt.Printf("%+v\n",lcservices.GetCustomerByID(5))
+	apiservices.InitRestfulAPIServices(configuration.ListenPort)
 }

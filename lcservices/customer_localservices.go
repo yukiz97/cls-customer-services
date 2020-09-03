@@ -2,28 +2,31 @@ package lcservices
 
 import (
 	"github.com/yukiz97/cls-customer-services/models"
+	"github.com/yukiz97/utils/date"
 	"github.com/yukiz97/utils/dbcon"
+	"time"
 )
 
 var strDBConnect string
 var mapCustomerField map[string]string
 
 //InsertCustomer insert customer by value of struct
-func InsertCustomer(modelCustomer models.Customer) bool {
-	isInserted := true
+func InsertCustomer(modelCustomer models.Customer) int64 {
 	db := dbcon.InitDBMySQL(strDBConnect)
 	defer db.Close()
 	insertQuery, err := db.Prepare("INSERT INTO Customer(" + mapCustomerField["name"] + ", " + mapCustomerField["address"] + ", " + mapCustomerField["email"] + ") VALUES(?,?,?)")
 	if err != nil {
 		panic(err.Error())
 	}
-	_, errInsert := insertQuery.Exec(modelCustomer.Name, modelCustomer.Address, modelCustomer.Email)
+	result, errInsert := insertQuery.Exec(modelCustomer.Name, modelCustomer.Address, modelCustomer.Email)
 
 	if errInsert != nil {
-		isInserted = false
+		panic(errInsert)
 	}
 
-	return isInserted
+	idInserted, _ := result.LastInsertId()
+
+	return idInserted
 }
 
 //UpdateCustomer update customer by value of struct
@@ -35,9 +38,15 @@ func UpdateCustomer(modelCustomer models.Customer) bool {
 	if err != nil {
 		panic(err.Error())
 	}
-	_, errUpdate := updateQuery.Exec(modelCustomer.Name, modelCustomer.Address, modelCustomer.Email, modelCustomer.ID)
+	result, errUpdate := updateQuery.Exec(modelCustomer.Name, modelCustomer.Address, modelCustomer.Email, modelCustomer.ID)
 
 	if errUpdate != nil {
+		panic(errUpdate)
+	}
+
+	rowAffected, _ := result.RowsAffected()
+
+	if rowAffected == 0 {
 		isUpdated = false
 	}
 
@@ -53,9 +62,15 @@ func DeleteCustomer(idCustomer int) bool {
 	if err != nil {
 		panic(err.Error())
 	}
-	_, errDelete := deleteQuery.Exec(idCustomer)
+	result, errDelete := deleteQuery.Exec(idCustomer)
 
 	if errDelete != nil {
+		panic(errDelete)
+	}
+
+	rowAffected, _ := result.RowsAffected()
+
+	if rowAffected == 0 {
 		isDeleted = false
 	}
 
@@ -76,10 +91,11 @@ func GetCustomerList(keyWord string) []models.Customer {
 	}
 	result, _ := selectQuery.Query("%" + keyWord + "%")
 	for result.Next() {
+		var createDate time.Time
 		modelCustomer := models.Customer{}
 
-		result.Scan(&modelCustomer.ID, &modelCustomer.Name, &modelCustomer.Address, &modelCustomer.Email, &modelCustomer.CreateDate)
-
+		result.Scan(&modelCustomer.ID, &modelCustomer.Name, &modelCustomer.Address, &modelCustomer.Email, &createDate)
+		modelCustomer.CreateDate = date.FormatTimeToString(createDate, date.Format1)
 		listCustomer = append(listCustomer, modelCustomer)
 	}
 
@@ -99,9 +115,11 @@ func GetCustomerByID(idCustomer int) models.Customer {
 	}
 	result, _ := selectQuery.Query(idCustomer)
 	for result.Next() {
+		var createDate time.Time
 		modelCustomer = models.Customer{}
 
-		result.Scan(&modelCustomer.ID, &modelCustomer.Name, &modelCustomer.Address, &modelCustomer.Email, &modelCustomer.CreateDate)
+		result.Scan(&modelCustomer.ID, &modelCustomer.Name, &modelCustomer.Address, &modelCustomer.Email, &createDate)
+		modelCustomer.CreateDate = date.FormatTimeToString(createDate, date.Format1)
 	}
 
 	return modelCustomer
