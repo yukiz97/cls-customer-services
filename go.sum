@@ -1,0 +1,6 @@
+github.com/go-sql-driver/mysql v1.5.0 h1:ozyZYNQW3x3HtqT1jira07DN2PArx2v7/mN66gGcHOs=
+github.com/go-sql-driver/mysql v1.5.0/go.mod h1:DCzpHaOWr8IXmIStZouvnhqoel9Qv2LBy8hT2VhHyBg=
+github.com/mitchellh/mapstructure v1.3.3 h1:SzB1nHZ2Xi+17FP0zVQBHIZqvwRN9408fJO8h+eeNA8=
+github.com/mitchellh/mapstructure v1.3.3/go.mod h1:bFUtVrKA4DC2yAKiSyO/QUcy7e+RRV2QTWOzhPopBRo=
+github.com/yukiz97/utils v0.0.0-20200902175627-a9053c90a601 h1:LePc68Q8g5//VdHz/XTwzdrquQAp+FUfyX/MmADkkRA=
+github.com/yukiz97/utils v0.0.0-20200902175627-a9053c90a601/go.mod h1:5oQMZYMZQMxX7NfW4Ov+Yl0Y36sOm0LL11QUWL360PA=
