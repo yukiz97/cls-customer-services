@@ -11,7 +11,7 @@ import (
 	"strconv"
 )
 
-func home(response http.ResponseWriter, request *http.Request) {
+func home(response http.ResponseWriter, _ *http.Request) {
 	restapi.RespondWithJSON(response, http.StatusOK, "Welcome to restful API of cls - customer services")
 }
 
@@ -100,7 +100,7 @@ func deleteCustomer(response http.ResponseWriter, request *http.Request) {
 	}
 }
 
-func getCustomerList(response http.ResponseWriter, request *http.Request) {
+func getCustomerList(response http.ResponseWriter, _ *http.Request) {
 	listCustomer := lcservices.GetCustomerList("")
 
 	restapi.RespondWithJSON(response, http.StatusOK, listCustomer)

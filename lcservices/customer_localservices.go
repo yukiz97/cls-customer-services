@@ -1,10 +1,11 @@
 package lcservices
 
 import (
+	"time"
+
 	"github.com/yukiz97/cls-customer-services/models"
 	"github.com/yukiz97/utils/date"
 	"github.com/yukiz97/utils/dbcon"
-	"time"
 )
 
 var strDBConnect string
@@ -89,7 +90,7 @@ func GetCustomerList(keyWord string) []models.Customer {
 	if err != nil {
 		panic(err.Error())
 	}
-	result, _ := selectQuery.Query("%" + keyWord + "%")
+	result, _ := selectQuery.Query(keyWord)
 	for result.Next() {
 		var createDate time.Time
 		modelCustomer := models.Customer{}
