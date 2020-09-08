@@ -101,9 +101,30 @@ func deleteCustomer(response http.ResponseWriter, request *http.Request) {
 }
 
 func getCustomerList(response http.ResponseWriter, _ *http.Request) {
-	listCustomer := lcservices.GetCustomerList("")
+	listCustomer, arrId := lcservices.GetCustomerList("")
+	listCustomerReturn := make([]models.CustomerWithProductInfo,0)
 
-	restapi.RespondWithJSON(response, http.StatusOK, listCustomer)
+	if len(listCustomer) > 0 {
+		mapDeviceInfo := lcservices.GetCustomerDeviceSimplifyInfo(arrId)
+		mapLicenseInfo := lcservices.GetCustomerLicenseSimplifyInfo(arrId)
+		for _, model := range listCustomer {
+			devices := make([]models.CustomerDeviceSimplifyInfo,0)
+			licenses := make([]models.CustomerLicenseSimplifyInfo,0)
+
+			if _, ok := mapDeviceInfo[model.ID]; ok {
+				devices = mapDeviceInfo[model.ID]
+			}
+
+			if _, ok := mapLicenseInfo[model.ID]; ok {
+				licenses = mapLicenseInfo[model.ID]
+			}
+
+			modelReturn := models.CustomerWithProductInfo{Customer: model, Devices: devices,Licenses: licenses}
+			listCustomerReturn = append(listCustomerReturn, modelReturn)
+		}
+	}
+
+	restapi.RespondWithJSON(response, http.StatusOK, listCustomerReturn)
 }
 
 func getCustomer(response http.ResponseWriter, request *http.Request) {
@@ -139,7 +160,7 @@ func searchCustomerList(response http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	listCustomer := lcservices.GetCustomerList(modelInput.Keyword)
+	listCustomer,_ := lcservices.GetCustomerList(modelInput.Keyword)
 
 	restapi.RespondWithJSON(response, http.StatusOK, listCustomer)
 }

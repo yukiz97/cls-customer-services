@@ -19,7 +19,7 @@ type configuration struct {
 
 func main() {
 	configuration := configuration{}
-	mapConfig := config.ParseJSONConfigToMap("D:\\DevApps\\_Workspace\\Golang\\.mydata\\cls-services\\config.json")
+	mapConfig := config.ParseJSONConfigToMap("D:\\DevApps\\_Workspace\\Golang\\.mydata\\cls-services\\config-customer.json")
 	err := mapstructure.Decode(mapConfig, &configuration)
 
 	if err != nil {
