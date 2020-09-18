@@ -138,7 +138,7 @@ func GetCustomerDeviceSimplifyInfo(arrId []int) map[int][]models.CustomerDeviceS
 	db := dbcon.InitDBMySQL(strDBConnect)
 	defer db.Close()
 	strIds := utils.IntArrayToString(arrId,",")
-	selectQuery, err := db.Prepare("SELECT IdDevice,ProductName,DeviceSerial,GuaranteeExpireDate,IdCustomer FROM device JOIN product ON device.IdProduct = product.IdProduct WHERE IdCustomer IN ("+strIds+")")
+	selectQuery, err := db.Prepare("SELECT IdDevice,ProductCode,DeviceSerial,GuaranteeExpireDate,IdCustomer FROM device JOIN product ON device.IdProduct = product.IdProduct WHERE IdCustomer IN ("+strIds+")")
 	if err != nil {
 		panic(err.Error())
 	}
@@ -170,7 +170,7 @@ func GetCustomerLicenseSimplifyInfo(arrId []int) map[int][]models.CustomerLicens
 	db := dbcon.InitDBMySQL(strDBConnect)
 	defer db.Close()
 	strIds := utils.IntArrayToString(arrId,",")
-	selectQuery, err := db.Prepare("SELECT IdLicense,ProductName,LicenseCode,ExpireDate,IdCustomer FROM license JOIN product ON license.IdProduct = product.IdProduct WHERE IdCustomer IN ("+strIds+")")
+	selectQuery, err := db.Prepare("SELECT IdLicense,ProductCode,LicenseCode,ExpireDate,IdCustomer FROM license JOIN product ON license.IdProduct = product.IdProduct WHERE IdCustomer IN ("+strIds+")")
 	if err != nil {
 		panic(err.Error())
 	}

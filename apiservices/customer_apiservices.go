@@ -101,6 +101,12 @@ func deleteCustomer(response http.ResponseWriter, request *http.Request) {
 }
 
 func getCustomerList(response http.ResponseWriter, _ *http.Request) {
+	listCustomer, _ := lcservices.GetCustomerList("")
+
+	restapi.RespondWithJSON(response, http.StatusOK, listCustomer)
+}
+
+func getCustomerListWithProduct(response http.ResponseWriter, _ *http.Request) {
 	listCustomer, arrId := lcservices.GetCustomerList("")
 	listCustomerReturn := make([]models.CustomerWithProductInfo,0)
 
@@ -171,6 +177,7 @@ func InitRestfulAPIServices(listenPort int) {
 
 	router.HandleFunc("/", home)
 	router.HandleFunc("/getCustomerList/", getCustomerList).Methods("GET")
+	router.HandleFunc("/getCustomerListWithProduct/", getCustomerListWithProduct).Methods("GET")
 	router.HandleFunc("/getCustomer/id/{id}", getCustomer).Methods("GET")
 
 	router.HandleFunc("/insertCustomer/", insertCustomer).Methods("POST")
